@@ -1,0 +1,9 @@
+.env*
+npm-debug.log
+node_modules
+.idea
+jmeter.log
+.DS_Store
+vault_env.sh
+letsencrypt-etc
+test/jest*

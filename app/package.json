@@ -1,0 +1,31 @@
+{
+  "name": "photouploader",
+  "version": "1.0.0",
+  "description": "An simple photo uploader",
+  "author": "Chris Stetson <chris.stetson@nginx.com>",
+  "private": true,
+  "scripts": {
+    "start": "pm2 start app.js",
+    "stop": "pm2 kill",
+    "status": "pm2 show app",
+    "logs": "pm2 logs app --lines 1000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nginxinc/ngra-photouploader.git"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.2.12",
+    "multer-s3": "^2.7.0",
+    "bluebird": "^2.10.2",
+    "dotenv": "^1.2.0",
+    "express": "~4.13.1",
+    "multer": "~1.0.6",
+    "newrelic": "^1.26.1",
+    "node-uuid": "^1.4.3",
+    "path": "^0.12.7",
+    "pm2": "^1.0.0",
+    "request-debug": "^0.2.0",
+    "request-promise": "^1.0.2"
+  }
+}
