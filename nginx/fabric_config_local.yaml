@@ -1,0 +1,25 @@
+name: uploader
+resolver:
+  host: 127.0.0.11
+  ttl: 1s
+root: /usr/share/nginx/html/
+log_to_syslog : false
+syslog_error_log_location: "syslog:server=localhost:5544 debug"
+error_log_location: "/var/log/nginx/error_log debug"
+service_log_name: photouploader_mra
+syslog_access_log_location: "syslog:server=localhost:5544,facility=local6,tag=photouploader_mra,severity=info json"
+access_log_location: "/var/log/nginx/access_log combined"
+services:
+  album-manager:
+    expose_external: true
+    server: album-manager:443
+    healthecheck: false
+    oss_port: ''
+    port: 82
+  resizer:
+    expose_external: false
+    server: resizer:443
+    healthecheck: false
+    healthcheck_uri: /healthcheck
+    oss_port: ''
+    port: 83
