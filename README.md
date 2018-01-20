@@ -141,7 +141,7 @@ $ docker exec -it uploader /bin/bash
 Once you have a shell in the container, change to the tests directory and install the testing libraries:
 ```
 $ cd /usr/src/test
-$ npm install --save-dev frisby@0.8.5 jasmine-node
+$ npm install --save-dev frisby@2.0.11 jasmine-node
 ```
 When thef libraries are installed, run the tests using NPM:
 ```
