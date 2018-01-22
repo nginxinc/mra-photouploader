@@ -1,11 +1,12 @@
 {
   "scripts": {
-    "test": "jasmine-node ."
+    "test": "jest test_spec.js"
   },
   "devDependencies": {
     "form-data": "^2.3.1",
     "frisby": "^2.0.11",
     "jasmine-node": "^1.14.5",
+    "jest": "^22.1.4",
     "mock-request": "^0.1.2"
   }
 }

@@ -2,8 +2,13 @@ const frisby = require('frisby');
 const fs = require('fs');
 const path = require('path');
 const FormData = require('form-data');
+const https = require('https');
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+const agent = new https.Agent({
+    rejectUnauthorized: false
+});
+
+frisby.globalSetup({request: {agent: agent}});
 
 /**
  * Every function in the uploader app.js file results in one or more calls to other services
@@ -27,20 +32,19 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 describe('Create User Test Functions', function(){
 
     it('Create Test User', function(done){
-        // First, create a user
-        let form = frisby.formData();
 
-        form.append('email', 'uploader-test@nginxps.com');
-        form.append('password', 'testing123');
+        // First create a user
         frisby
-            .post('https://pages/login', {
-                body: form,
-                json: false
+            .post('https://user-manager/v1/users', {
+                email: 'uploader-test@nginxps.com',
+                password: 'testing123'
+
             })
             .then(function(json){
                 console.log("Headers:", json);
             })
-            .inspectHeaders() // prints the headers
+            .inspectHeaders()
+            .inspectRequestHeaders() // prints the headers
             // .expect('header', 'auth-id') // verify that the auth-id header is in the response
             // .expect('status', 302) // login redirects to /account
             // .then(function(json) {
@@ -140,4 +144,4 @@ describe('Create User Test Functions', function(){
             // })
             .done(done);
     });
-})
+});
