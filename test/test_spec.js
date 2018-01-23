@@ -1,14 +1,12 @@
 const frisby = require('frisby');
 const fs = require('fs');
 const path = require('path');
-const FormData = require('form-data');
+const Joi = frisby.Joi; // Frisby exposes Joi for convenience
 const https = require('https');
 
 const agent = new https.Agent({
     rejectUnauthorized: false
 });
-
-frisby.globalSetup({request: {agent: agent}});
 
 /**
  * Every function in the uploader app.js file results in one or more calls to other services
@@ -35,113 +33,129 @@ describe('Create User Test Functions', function(){
 
         // First create a user
         frisby
+            .setup({
+                request: {
+                    agent: agent
+                }
+            })
             .post('https://user-manager/v1/users', {
                 email: 'uploader-test@nginxps.com',
                 password: 'testing123'
 
             })
-            .then(function(json){
-                console.log("Headers:", json);
+            .then(function(resp){
+                console.log("Response:", resp);
             })
-            .inspectHeaders()
             .inspectRequestHeaders() // prints the headers
-            // .expect('header', 'auth-id') // verify that the auth-id header is in the response
-            // .expect('status', 302) // login redirects to /account
-            // .then(function(json) {
+            .inspectHeaders()
+            .expect('json', 'email', 'uploader-test@nginxps.com') // verify that the auth-id header is in the response
+            .expect('status', 200) // login redirects to /account
+            .then(function(resp) {
 
-            //     // get the header from the response and set it to a variable
-            //     console.log(this.current.response.headers['auth-id']);
-            //     var authID = this.current.response.headers['auth-id'];
+                // get the header from the response and set it to a variable
+                console.log(resp.body.id);
+                var authID = resp.body.id;
 
-            //     // Use the user ID to create an album for the user
-            //     frisby.create('Create an album for the user')
-            //         .post('https://album-manager/albums', {'album[name]': 'testAlbum'}, {json:false})
-            //         .addHeader('Auth-ID', authID)
-            //         .expect('status', 201) // ensure that we have a response
-            //         .expectJSONTypes({
-            //             id:Number,
-            //             name:String,
-            //             description: null,
-            //             created_at: String,
-            //             updated_at: String,
-            //             user_id: String,
-            //             poster_image_id: null,
-            //             state: String,
-            //             images: Array
-            //         }) // validate the data of the newly created album
-            //         .afterJSON(function(json){
+                // Use the user ID to create an album for the user
+                return frisby
+                    .setup({
+                        request: {
+                            headers: {
+                                'Auth-ID': authID
+                            },
+                            agent: agent
+                        }
+                    })
+                    .timeout(20000)
+                    .post('https://album-manager/albums', {
+                        'album[name]': 'testAlbum'
+                    })
+                    .then(function(resp){
+                        console.log("Response:", resp.body)
+                    })
+                    .expect('status', 201) // ensure that we have a response
+                    .inspectRequestHeaders()
+                    .expect('jsonTypes', {
+                        id: Joi.number().required(),
+                        name: Joi.string().allow(null).required(),
+                        description: Joi.string().allow(null).required(),
+                        created_at: Joi.string().required(),
+                        updated_at: Joi.string().required(),
+                        user_id: Joi.string().required(),
+                        poster_image_id: Joi.string().allow(null).required(),
+                        state: Joi.string().required(),
+                        images: Joi.array().required()
+                    }) // validate the data of the newly created album
+                    .then(function(resp){
 
-            //             console.log(json);
+                        console.log(resp);
 
-            //             // get the image and create a form to submit the image
-            //             var imagePath = path.resolve(__dirname, 'nginx.jpg');
-            //             var form = new FormData({});
+                        // get the image and create a form to submit the image
+                        var imagePath = path.resolve(__dirname, 'nginx.jpg');
+                        var form = frisby.formData();
 
-            //             form.append('image', fs.createReadStream(imagePath), {
-            //                 knownLength: fs.statSync(imagePath).size
-            //             });
-            //             form.append('album_id', json.id);
+                        form.append('image', fs.createReadStream(imagePath), {
+                            knownLength: fs.statSync(imagePath).size
+                        });
+                        form.append('album_id', resp.body.id);
 
+                        // send a post request to create the image
+                        return frisby // Post image
+                            .setup({
+                                request: {
+                                    headers: {
+                                        'Auth-ID': authID,
+                                        'content-type': 'multipart/form-data; boundary=' + form.getBoundary(),
+                                        'content-length': form.getLengthSync()
+                                    }
+                                }
+                            })
+                            .post('http://localhost:3000/image', {
+                                body: form
+                            })
+                            // .inspectJSON() // print the response
+                            .expect('status', 200) // verify the status
+                            .expect('jsonTypes', {
+                                id: Joi.number().required(),
+                                name: Joi.string().allow(null).required(),
+                                description: Joi.string().allow(null).required(),
+                                created_at: Joi.string().required(),
+                                updated_at: Joi.string().required(),
+                                album_id: Joi.number().required(),
+                                url: Joi.string().allow(null).required(),
+                                thumb_url: Joi.string().required(),
+                                thumb_height: Joi.number().required(),
+                                thumb_width: Joi.number().required(),
+                                medium_url: Joi.string().required(),
+                                medium_height: Joi.number().required(),
+                                medium_width: Joi.number().required(),
+                                large_url: Joi.string().required(),
+                                large_height: Joi.number().required(),
+                                large_width: Joi.number().required()
+                            }) // validate the JSON response and verify that all the images have been created
+                            .then(function(resp) {
+                                console.log("Response:", resp.body);
 
-            //             // send a post request to create the image
-            //             frisby.create('Post image')
-            //                 .post('http://localhost:3000/image', form, {
-            //                     json:false,
-            //                     headers: {
-            //                         'Auth-ID': authID,
-            //                         'content-type': 'multipart/form-data; boundary=' + form.getBoundary(),
-            //                         'content-length': form.getLengthSync()
-            //                     }
-            //                 })
-            //                 .inspectJSON() // print the response
-            //                 .expect('status', 200) // verify the status
-            //                 .expectJSONTypes({
-            //                     id: Number,
-            //                     name: null,
-            //                     description: null,
-            //                     created_at: String,
-            //                     updated_at: String,
-            //                     album_id: Number,
-            //                     url: null,
-            //                     thumb_url: String,
-            //                     thumb_height: Number,
-            //                     thumb_width: Number,
-            //                     medium_url: String,
-            //                     medium_height: Number,
-            //                     medium_width: Number,
-            //                     large_url: String,
-            //                     large_height: Number,
-            //                     large_width: Number
-            //                 }) // validate the JSON response and verify that all the images have been created
-            //                 .afterJSON(function(json) {
-            //                     frisby.create('Check thumb_url')
-            //                         .get(json.thumb_url)
-            //                         .expect('status', 200)
-            //                         .done()
-            //                 })
-            //                 .afterJSON(function(json) {
-            //                     frisby.create('Check medium_url')
-            //                         .get(json.medium_url)
-            //                         .expect('status', 200)
-            //                         .done()
-            //                 })
-            //                 .afterJSON(function(json) {
-            //                     frisby.create('Check large_url')
-            //                         .get(json.large_url)
-            //                         .expect('status', 200)
-            //                         .done()
-            //                 }).afterJSON(function(json){
-            //                     frisby.create('Delete image')
-            //                         .delete('http://localhost:3000/image/uploads/photos/' + json.id)
-            //                         .expect('status', 200)
-            //                         .expectBodyContains('Images deleted successfully')
-            //                         .done();
-            //                 })
-            //                 .done();
-
-            //         })
-            //         .done();
-            // })
-            .done(done);
+                                // Check resp urls
+                                return Promise.all([
+                                    frisby                         // Check thumb_url
+                                        .get(resp.body.thumb_url)
+                                        .expect('status', 200)
+                                        .promise(),
+                                    frisby                         // Check medium_url
+                                        .get(resp.body.medium_url)
+                                        .expect('status', 200),
+                                    frisby                         // Check large_url
+                                        .get(resp.body.large_url)
+                                        .expect('status', 200),
+                                    frisby                         // Delete Image
+                                        .del('http://localhost:3000/image/uploads/photos/' + resp.body.id)
+                                        .expect('status', 200)
+                                        .expect('json', 'Images deleted successfully')
+                                ])
+                            })
+                    })
+            })
+        .done(done);
     });
 });
