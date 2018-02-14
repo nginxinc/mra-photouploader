@@ -42,7 +42,7 @@ RUN /usr/local/bin/install-nginx.sh && \
 	ln -sf /dev/stderr /var/log/nginx/error_log
 
 
-
+COPY ./app/status.html /usr/share/nginx/html/status.html
 
 WORKDIR /usr/src/app
 COPY ./app /usr/src/app/
