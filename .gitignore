@@ -5,4 +5,6 @@ node_modules
 jmeter.log
 .DS_Store
 vault_env.sh
-
+letsencrypt-etc
+test/jest*
+test/package-lock.json

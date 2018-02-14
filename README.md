@@ -122,6 +122,14 @@ While running the _Ingenious_ application locally, you must update your hosts fi
 127.0.0.1   fake-s3
 ``` 
 
+#### A note about Fake S3
+[Fake S3](https://hub.docker.com/r/lphoward/fake-s3/) makes it simple to build and test applications which use Amazon S3. If Ingenious were in production, it would connect directly to an S3 service on AWS. Here are a couple of alternatives to Fake S3:
+- [Moto](https://github.com/spulec/moto)
+- [localstack](https://github.com/atlassian/localstack)
+
+We haven't tested either of these and there are other options as well. If you successfully implement an alternative to Fake S3, let us know by creating a [pull request](https://github.com/nginxinc/mra-photoresizer/pulls).   
+
+
 ### 6. Testing
 
 The Photo Uploader service is unique among the services in the NGINX MRA because every function in [app.js](app/app.js) results in a call to another service. As such, only integration tests have been implemented and must be run when all the services are available.
@@ -133,7 +141,7 @@ $ docker exec -it uploader /bin/bash
 Once you have a shell in the container, change to the tests directory and install the testing libraries:
 ```
 $ cd /usr/src/test
-$ npm install --save-dev frisby@0.8.5 jasmine-node
+$ npm install package.json
 ```
 When thef libraries are installed, run the tests using NPM:
 ```
