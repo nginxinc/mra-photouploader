@@ -52,4 +52,9 @@ RUN npm update && \
 
 EXPOSE 443 80 3000
 
+RUN chmod -R 755 /etc/nginx
+RUN chmod -R 777 /var/log/nginx
+RUN useradd --create-home -s /bin/bash me
+USER me
+
 CMD ["./start.sh"]
