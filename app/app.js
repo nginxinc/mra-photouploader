@@ -19,6 +19,7 @@ var path = require('path');
 
 var app = express();
 
+process.setuid("me");
 // Configure AWS information:
 // - Access key ID
 // - Secret access key

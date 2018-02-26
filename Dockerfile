@@ -1,5 +1,7 @@
 FROM node:9
 
+RUN useradd --create-home -s /bin/bash me
+
 ARG CONTAINER_ENGINE_ARG
 ARG USE_NGINX_PLUS_ARG
 ARG USE_VAULT_ARG
@@ -51,10 +53,5 @@ RUN npm update && \
     npm install -g pm2
 
 EXPOSE 443 80 3000
-
-RUN chmod -R 755 /etc/nginx
-RUN chmod -R 777 /var/log/nginx
-RUN useradd --create-home -s /bin/bash me
-USER me
 
 CMD ["./start.sh"]
