@@ -1,6 +1,6 @@
 FROM node:9
 
-RUN useradd --create-home -s /bin/bash me
+RUN useradd --create-home -s /bin/bash uploader
 
 ARG CONTAINER_ENGINE_ARG
 ARG USE_NGINX_PLUS_ARG
