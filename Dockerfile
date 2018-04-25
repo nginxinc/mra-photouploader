@@ -1,5 +1,7 @@
 FROM node:9
 
+RUN useradd --create-home -s /bin/bash uploader
+
 ARG CONTAINER_ENGINE_ARG
 ARG USE_NGINX_PLUS_ARG
 ARG USE_VAULT_ARG
@@ -42,7 +44,7 @@ RUN /usr/local/bin/install-nginx.sh && \
 	ln -sf /dev/stderr /var/log/nginx/error_log
 
 
-
+COPY ./app/status.html /usr/share/nginx/html/status.html
 
 WORKDIR /usr/src/app
 COPY ./app /usr/src/app/
