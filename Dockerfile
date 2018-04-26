@@ -49,8 +49,8 @@ COPY ./app/status.html /usr/share/nginx/html/status.html
 WORKDIR /usr/src/app
 COPY ./app /usr/src/app/
 COPY ./test /usr/src/test/
-RUN npm update && \
-    npm install -g pm2
+RUN yarn upgrade && \
+    yarn global add pm2
 
 EXPOSE 443 80 3000
 
