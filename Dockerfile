@@ -49,7 +49,7 @@ COPY ./app/status.html /usr/share/nginx/html/status.html
 WORKDIR /usr/src/app
 COPY ./app /usr/src/app/
 COPY ./test /usr/src/test/
-RUN yarn upgrade && \
+RUN yarn install && \
     yarn global add pm2
 
 EXPOSE 443 80 3000

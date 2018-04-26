@@ -16,16 +16,18 @@
   },
   "dependencies": {
     "aws-sdk": "^2.2.12",
-    "multer-s3": "^2.7.0",
-    "bluebird": "^2.10.2",
     "dotenv": "^1.2.0",
+    "eslint": "^4.19.1",
     "express": "~4.13.1",
     "multer": "~1.0.6",
+    "multer-s3": "^2.7.0",
     "newrelic": "^1.26.1",
     "node-uuid": "^1.4.3",
     "path": "^0.12.7",
     "pm2": "^1.0.0",
+    "request": "^2.85.0",
     "request-debug": "^0.2.0",
-    "request-promise": "^1.0.2"
+    "request-promise": "^1.0.2",
+    "request-promise-native": "^1.0.5"
   }
 }
