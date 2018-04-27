@@ -1,5 +1,7 @@
 FROM node:9
 
+RUN useradd --create-home -s /bin/bash uploader
+
 ARG CONTAINER_ENGINE_ARG
 ARG USE_NGINX_PLUS_ARG
 ARG USE_VAULT_ARG
@@ -47,8 +49,10 @@ COPY ./app/status.html /usr/share/nginx/html/status.html
 WORKDIR /usr/src/app
 COPY ./app /usr/src/app/
 COPY ./test /usr/src/test/
-RUN npm update && \
-    npm install -g pm2
+RUN yarn install && \
+    yarn global add pm2 && \
+    cd ../test && \
+    yarn install
 
 EXPOSE 443 80 3000
 

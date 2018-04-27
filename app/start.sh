@@ -9,13 +9,14 @@ then
     echo fabric configuration set;
 fi
 
+npm install
+
 if [ "$DEV_MODE" = "true" ]
 then
-    APP="$APP --watch"
+    su uploader -c 'pm2 start app.js --watch' &
+else
+    su uploader -c 'pm2 start app.js' &
 fi
-
-npm install
-$APP 
 
 nginx -c "$NGINX_CONF" -g "pid $NGINX_PID;"
 

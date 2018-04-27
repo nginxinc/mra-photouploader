@@ -138,14 +138,13 @@ In order to run the tests, start all the services in the MRA following the docum
 ```
 $ docker exec -it uploader /bin/bash
 ```
-Once you have a shell in the container, change to the tests directory and install the testing libraries:
+Once you have a shell in the container, change to the tests directory:
 ```
 $ cd /usr/src/test
-$ npm install package.json
 ```
-When thef libraries are installed, run the tests using NPM:
+Now run the tests using YARN:
 ```
-$ npm test
+$ yarn test
 ```
 
 You will see output in the console indicating whether the tests were successful.
