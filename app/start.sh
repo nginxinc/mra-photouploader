@@ -19,10 +19,10 @@ npm install
 
 if [ "$DEV_MODE" = "true" ]
 then
-    su uploader -c 'pm2 start app.js --watch' &
-else
-    su uploader -c 'pm2 start app.js' &
+    APP="pm2 start app.js --watch"
 fi
+
+su uploader -c "$APP" &
 
 sleep 10
 #APP gets rendered as PM2
