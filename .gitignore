@@ -7,3 +7,4 @@ jmeter.log
 vault_env.sh
 letsencrypt-etc
 test/jest*
+*.iml
