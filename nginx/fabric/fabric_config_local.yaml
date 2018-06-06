@@ -19,7 +19,7 @@ services:
   resizer:
     expose_external: false
     server: resizer:443
-    healthecheck: false
+    healthecheck: true
     healthcheck_uri: /healthcheck
     oss_port: ''
     port: 83
