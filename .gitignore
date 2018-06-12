@@ -13,3 +13,4 @@ test/package-lock.json
 *.key
 *.pem
 app/yarn-error.log
+*.csr
