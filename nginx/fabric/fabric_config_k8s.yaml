@@ -12,13 +12,13 @@ syslog_access_log_location: "syslog:server=localhost:5544,facility=local6,tag=pa
 access_log_location: "/var/log/nginx/access_log combined"
 services:
   album-manager:
-    server: nginx-mra.svc.cluster.local
+    server: svc.cluster.local:443
     service: service=_https._tcp.album-manager
     expose_external: true
     healthcheck: true
     oss_port: 12001
   resizer:
-    server: nginx-mra.svc.cluster.local
+    server: svc.cluster.local:443
     service: service=_https._tcp.photoresizer
     expose_external: false
     healthcheck: true
