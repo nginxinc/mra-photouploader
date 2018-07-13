@@ -1,0 +1,86 @@
+openapi: 3.0.0
+servers:
+  - url: /v1
+info:
+  description: MRA Uploader API
+  version: "1.0.0-oas3"
+  title: MRA Uploader API
+  contact:
+    name: Aidan Carson
+    email: aidan.carson@nginx.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /:
+    get:
+      responses:
+        '200':
+          description: Hello World!
+  /image:
+    post:
+      tags:
+        - image
+      summary: Upload Image
+      description: Calls resizer and album manager to upload image and add it to album
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+        '500':
+          description: image not uploaded
+      x-tags:
+        - tag: image
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                note:
+                  description: Image data
+                  type: string
+        required: true
+  '/image/uploads/photos/{uuid}':
+    delete:
+      tags:
+        - image
+      summary: Delete single image based off id
+      parameters:
+        - name: uuid
+          in: path
+          description: The id of image to be deleted within S3 bucket
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '500':
+          description: image unsuccessfully deleted
+components:
+  schemas:
+    Image:
+      type: object
+      properties:
+        thumb_url:
+          type: string
+        Large_width:
+          type: string
+        Medium_height:
+          type: string
+        Medium_width:
+          type: string
+        Thumb_width:
+          type: string
+        Thumb_height:
+          type: string
+        medium_url:
+          type: string
+        large_url:
+          type: string
+        Large_height:
+          type: string

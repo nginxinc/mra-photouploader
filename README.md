@@ -68,14 +68,14 @@ The [Dockerfile](Dockerfile) sets some ENV arguments which are used when the ima
 - **CONTAINER_ENGINE**  
     The container engine used to run the images in a container. _CONTAINER_ENGINE_ can be one of the following values
      - kubernetes (default): to run on Kubernetes
-        When the nginx.conf file is built, the [fabric_config_k8s.yaml](nginx/fabric_config_k8s.yaml) will be
-        used to populate the open source version of the [nginx.conf template](nginx/nginx-plus-fabric.conf.j2)
+        When the nginx.conf file is built, the [fabric_config_k8s.yaml](nginx/fabric/fabric_config_k8s.yaml) will be
+        used to populate the open source version of the [nginx.conf template](nginx/fabric/fabric_nginx-plus.conf.j2)
      - mesos: to run on DC/OS
-        When the nginx.conf file is built, the [fabric_config.yaml](nginx/fabric_config.yaml) will be
-        used to populate the open source version of the [nginx.conf template](nginx/nginx-plus-fabric.conf.j2)  
+        When the nginx.conf file is built, the [fabric_config.yaml](nginx/fabric/fabric_config_dcos.yaml) will be
+        used to populate the open source version of the [nginx.conf template](nginx/fabric/fabric_nginx-plus.conf.j2)  
      - local: to run in containers on the machine where the repository has been cloned
-        When the nginx.conf file is built, the [fabric_config_local.yaml](nginx/fabric_config_local.yaml) will be
-        used to populate the open source version of the [nginx.conf template](nginx/nginx-plus-fabric.conf.j2)                  
+        When the nginx.conf file is built, the [fabric_config_local.yaml](nginx/fabric/fabric_config_local.yaml) will be
+        used to populate the open source version of the [nginx.conf template](nginx/fabric/fabric_nginx-plus.conf.j2)                  
      
 ### 2. Decide whether to use NGINX Open Source or NGINX Plus
 #### <a href="#" id="installing-nginx-oss"></a>Installing NGINX Open Source
@@ -138,14 +138,13 @@ In order to run the tests, start all the services in the MRA following the docum
 ```
 $ docker exec -it uploader /bin/bash
 ```
-Once you have a shell in the container, change to the tests directory and install the testing libraries:
+Once you have a shell in the container, change to the tests directory:
 ```
 $ cd /usr/src/test
-$ npm install --save-dev frisby@0.8.5 jasmine-node
 ```
-When thef libraries are installed, run the tests using NPM:
+Now run the tests using YARN:
 ```
-$ npm test
+$ yarn test
 ```
 
 You will see output in the console indicating whether the tests were successful.
