@@ -7,4 +7,6 @@ jmeter.log
 vault_env.sh
 letsencrypt-etc
 test/jest*
+test/__tests__/
 test/package-lock.json
+*.iml
