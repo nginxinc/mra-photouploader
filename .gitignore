@@ -10,3 +10,7 @@ test/jest*
 test/__tests__/
 test/package-lock.json
 *.iml
+*.key
+*.pem
+app/yarn-error.log
+*.csr
