@@ -15,7 +15,7 @@
     "url": "https://github.com/nginxinc/ngra-photouploader.git"
   },
   "dependencies": {
-    "aws-sdk": "^2.2.12",
+    "aws-sdk": "^2.814.0",
     "dotenv": "^1.2.0",
     "eslint": "^4.19.1",
     "express": "~4.13.1",
