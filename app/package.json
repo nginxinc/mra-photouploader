@@ -18,7 +18,7 @@
     "aws-sdk": "^2.2.12",
     "dotenv": "^1.2.0",
     "eslint": "^4.19.1",
-    "express": "~4.13.1",
+    "express": "~4.17.3",
     "multer": "~1.0.6",
     "multer-s3": "^2.7.0",
     "newrelic": "^1.26.1",
